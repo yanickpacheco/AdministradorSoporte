@@ -51,6 +51,33 @@ Public Class frmIngresoSolicitud
         End Try
     End Sub
 
+    Private Sub ListaInsumos(ByVal combo As ComboBox)
+
+        Dim mitabla As New DataTable
+        Dim DA As SqlDataAdapter
+        Dim cmd As New SqlCommand
+        Dim Simbolo As String = ""
+        Dim sql As String = ""
+        cmd.CommandType = CommandType.StoredProcedure
+        Try
+            sql = "dbo.pa_ListaInsumos"
+
+            cmd.CommandText = sql
+            cmd.Connection = cnn
+            DA = New SqlDataAdapter(cmd)
+            DA.Fill(mitabla)
+
+
+            combo.DataSource = mitabla
+            combo.DisplayMember = "nombreProducto"
+            combo.ValueMember = "idProducto"
+            combo.SelectedIndex = -1
+
+        Catch ex As Exception
+            MsgBox("Error Listar Insumos" & vbNewLine & ex.Message, MsgBoxStyle.Critical, "Error")
+        End Try
+    End Sub
+
     Private Sub ListaTipoPlataforma(ByVal combo As ComboBox)
 
         Dim mitabla As New DataTable
@@ -127,6 +154,11 @@ Public Class frmIngresoSolicitud
             Exit Function
         End If
 
+        If cmbInsumo.SelectedIndex < 0 Then
+            MsgBox("Debe ingresar Plataforma", vbInformation, "")
+            Exit Function
+        End If
+
         If cmbSolicitante.SelectedIndex < 0 Then
             MsgBox("Debe ingresar Solicitante", vbInformation, "")
             Exit Function
@@ -162,6 +194,7 @@ Public Class frmIngresoSolicitud
     ''' <param name="plataforma"></param>
     ''' <param name="solicitante"></param>
     ''' <param name="Observaciones"></param>
+    ''' <param name="tipoInsumos"></param>
     Private Sub IngresaSolicitud(ByVal piso As String, ByVal tipoSolicitud As Integer, ByVal plataforma As Integer, ByVal solicitante As Integer, ByVal Observaciones As String, ByVal producto As Integer, ByVal cantidad As Integer)
         Dim cmd As New SqlCommand
         Dim sql As String
@@ -214,6 +247,7 @@ Public Class frmIngresoSolicitud
         ListaTipoSolicitud(cmbTipoSolicitud)
         ListaTipoPlataforma(cmbPlataforma)
         ListaSolicitante(cmbSolicitante)
+        ListaInsumos(cmbInsumo)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnSalir.Click

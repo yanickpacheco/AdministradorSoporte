@@ -2,7 +2,7 @@
 
 Public Class frmInventario
 
-    Dim cnn As New SqlConnection("data source = 192.168.1.14; initial catalog = SOPORTE; User Id= mg; Password=Cordial.passs")
+    Dim cnn As New SqlConnection("data source = 192.168.1.14; initial catalog = SOPORTE; User Id= cp; Password=Cordial.passs")
     Private Sub frmInventario_Load(sender As Object, e As EventArgs) Handles Me.Load
 
 
